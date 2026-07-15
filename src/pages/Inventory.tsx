@@ -24,7 +24,7 @@ export default function Inventory() {
   const [budgetIndex, setBudgetIndex] = useState(BUDGET_OPTIONS.length - 1);
   const [selectedOwners, setSelectedOwners] = useState<string[]>([]);
   const [selectedTransmissions, setSelectedTransmissions] = useState<string[]>([]);
-  const [maxMileage, setMaxMileage] = useState<number>(300000);
+  const [maxMileage, setMaxMileage] = useState<number | null>(null);
   const [selectedFuelTypes, setSelectedFuelTypes] = useState<string[]>([]);
   
   const [isMobileFiltersOpen, setIsMobileFiltersOpen] = useState(false);
@@ -41,8 +41,10 @@ export default function Inventory() {
     }
     
     // Budget filter
-    const currentMaxBudget = BUDGET_OPTIONS[budgetIndex];
-    result = result.filter(car => car.price <= currentMaxBudget);
+    if (budgetIndex < BUDGET_OPTIONS.length - 1) {
+      const currentMaxBudget = BUDGET_OPTIONS[budgetIndex];
+      result = result.filter(car => car.price <= currentMaxBudget);
+    }
 
     // Owners filter
     if (selectedOwners.length > 0) {
@@ -64,7 +66,9 @@ export default function Inventory() {
     }
 
     // Mileage filter
-    result = result.filter(car => car.mileage <= maxMileage);
+    if (maxMileage !== null) {
+      result = result.filter(car => car.mileage <= maxMileage);
+    }
     
     // Fuel type filter
     if (selectedFuelTypes.length > 0) {
@@ -98,7 +102,7 @@ export default function Inventory() {
     setBudgetIndex(BUDGET_OPTIONS.length - 1);
     setSelectedOwners([]);
     setSelectedTransmissions([]);
-    setMaxMileage(300000);
+    setMaxMileage(null);
     setSelectedFuelTypes([]);
     setSearchTerm('');
     setSortBy('newest');
@@ -263,7 +267,9 @@ export default function Inventory() {
                 <div>
                   <div className="flex justify-between items-center mb-4">
                     <h4 className="text-[10px] uppercase tracking-wider text-zinc-400 font-bold font-mono">Max Mileage</h4>
-                    <span className="text-[11px] text-white tracking-wider font-semibold font-mono">{maxMileage.toLocaleString()} KM</span>
+                    <span className="text-[11px] text-white tracking-wider font-semibold font-mono">
+                      {maxMileage === null ? 'Any' : `${maxMileage.toLocaleString()} KM`}
+                    </span>
                   </div>
                   <div className="px-2">
                     <input 
@@ -271,7 +277,7 @@ export default function Inventory() {
                       min="0" 
                       max="300000" 
                       step="5000"
-                      value={maxMileage} 
+                      value={maxMileage === null ? 300000 : maxMileage} 
                       onChange={(e) => setMaxMileage(parseInt(e.target.value))}
                       className="w-full accent-white h-1 bg-white/10 rounded-lg appearance-none cursor-pointer"
                     />
