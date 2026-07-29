@@ -63,7 +63,7 @@ export default function Home() {
       </Helmet>
 
       {/* Hero Space - Styled with quick action buttons using black and white minimalist style positioned slightly higher */}
-      <section className="relative h-[75vh] sm:h-[80vh] lg:h-[80vh] flex flex-col items-center justify-end pb-16 sm:pb-48 lg:pb-52 overflow-hidden px-4 text-center z-20">
+      <section className="relative min-h-[88vh] sm:min-h-[92vh] flex flex-col items-center justify-end pb-20 sm:pb-32 lg:pb-36 overflow-hidden px-4 text-center z-20">
         <div className="max-w-4xl mx-auto flex flex-col items-center justify-center w-full">
           
           <div className="relative z-30 flex flex-col sm:flex-row items-center justify-center gap-4 sm:gap-6 w-full max-w-xs sm:max-w-xl mx-auto">
@@ -81,7 +81,7 @@ export default function Home() {
                     height="calc(100% - 2px)" 
                     rx="11" 
                     pathLength="100"
-                    className="circulating-ring stroke-white stroke-[2px] opacity-0 group-hover:opacity-100" 
+                    className="circulating-ring stroke-white stroke-[2px] opacity-100" 
                   />
                 </svg>
                 Explore Collection
@@ -113,40 +113,40 @@ export default function Home() {
       </section>
 
       {/* Why Choose Us */}
-      <section className="pt-32 pb-24 sm:py-24 bg-transparent relative z-10">
+      <section className="py-12 sm:py-16 bg-transparent relative z-10">
+        <div className="container mx-auto max-w-7xl px-4">
+          <div className="text-center max-w-3xl mx-auto mb-8 sm:mb-12">
+            <span className="text-zinc-400 tracking-[0.2em] uppercase text-[10px] sm:text-xs font-bold mb-2 block font-mono">Certified Quality Standards</span>
+            <h2 className="text-2xl sm:text-3xl font-sans text-white tracking-tight font-bold">Uncompromising Assurance</h2>
+          </div>
+
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 sm:gap-6">
+            {[
+              { icon: ShieldCheck, title: "Rigorous Checks", desc: "Multi-point mechanical, structural, and aesthetic certification on every vehicle." },
+              { icon: Banknote, title: "Transparent Pricing", desc: "Upfront, fair market pricing with zero hidden fees or sales pressure." },
+              { icon: Car, title: "Custom Financing", desc: "Tailored auto loan packages from leading premium banking partners." },
+              { icon: FileText, title: "Pristine Transfer", desc: "Complete hassle-free management of RTO transfers and ownership paperwork." }
+            ].map((feature, i) => (
+              <div key={i} className="group relative bg-zinc-950/40 border border-white/5 hover:border-white/15 hover:bg-zinc-950/60 transition-all duration-300 p-5 rounded-xl flex flex-col items-center text-center shadow-lg backdrop-blur-md">
+                <div className="w-12 h-12 bg-zinc-900/65 border border-white/10 group-hover:border-white/25 group-hover:bg-zinc-950/80 transition-all duration-300 flex items-center justify-center mb-4 rounded-xl shadow-sm backdrop-blur-md">
+                  <feature.icon className="w-5 h-5 text-white" />
+                </div>
+                <h3 className="text-xs font-bold tracking-widest text-white mb-2 uppercase font-mono">{feature.title}</h3>
+                <p className="text-zinc-400 text-xs leading-relaxed font-light">{feature.desc}</p>
+              </div>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      {/* Testimonials */}
+      <section className="pt-4 sm:pt-8 pb-16 sm:pb-24 bg-transparent animate-fade-in relative z-10">
          <div className="container mx-auto max-w-7xl px-4">
-           <div className="text-center max-w-3xl mx-auto mb-20">
-             <span className="text-zinc-400 tracking-[0.2em] uppercase text-xs font-bold mb-4 block font-mono">Certified Quality Standards</span>
-             <h2 className="text-3xl md:text-4xl font-sans text-white tracking-tight font-bold">Uncompromising Assurance</h2>
+           <div className="text-center mb-10 sm:mb-20">
+             <h2 className="text-2xl sm:text-3xl font-serif text-white tracking-tight font-bold">Client Testimonials</h2>
+             <div className="w-16 sm:w-24 h-[1px] bg-white/20 mx-auto mt-3 sm:mt-4"></div>
            </div>
- 
-           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
-             {[
-               { icon: ShieldCheck, title: "Rigorous Checks", desc: "Every car in our catalog undergoes rigorous multi-point mechanical, structural, and aesthetic certification.", iconColor: "text-white", titleColor: "text-white", borderColor: "group-hover:border-white/35" },
-               { icon: Banknote, title: "Transparent Pricing", desc: "Accurate, upfront, and completely transparent market pricing ensures fair, clean, and pressure-free value.", iconColor: "text-zinc-200", titleColor: "text-zinc-200", borderColor: "group-hover:border-zinc-300/35" },
-               { icon: Car, title: "Custom Financing", desc: "Custom auto loan structures via leading banking and finance partners.", iconColor: "text-zinc-300", titleColor: "text-zinc-300", borderColor: "group-hover:border-zinc-400/35" },
-               { icon: FileText, title: "Pristine Transfer", desc: "Complete oversight and physical management of all ownership paperwork, RTO clearances, and transfers.", iconColor: "text-zinc-400", titleColor: "text-zinc-400", borderColor: "group-hover:border-zinc-800" }
-             ].map((feature, i) => (
-               <div key={i} className="group relative bg-zinc-950/40 border border-white/5 hover:border-white/15 hover:bg-zinc-950/60 transition-all duration-300 p-8 rounded-2xl flex flex-col items-center text-center shadow-lg backdrop-blur-md">
-                 <div className="w-16 h-16 bg-zinc-900/65 border border-white/10 group-hover:border-white/25 group-hover:bg-zinc-950/80 transition-all duration-300 flex items-center justify-center mb-6 rounded-2xl shadow-sm backdrop-blur-md">
-                   <feature.icon className="w-6 h-6 text-white" />
-                 </div>
-                 <h3 className="text-xs font-bold tracking-widest text-white mb-3 uppercase font-mono">{feature.title}</h3>
-                 <p className="text-zinc-400 text-xs sm:text-sm leading-relaxed font-light">{feature.desc}</p>
-               </div>
-             ))}
-           </div>
-         </div>
-       </section>
- 
-       {/* Testimonials */}
-       <section className="py-24 bg-transparent animate-fade-in relative z-10">
-         <div className="container mx-auto max-w-7xl px-4">
-           <div className="text-center mb-20">
-             <h2 className="text-3xl font-serif text-white tracking-tight font-bold">Client Testimonials</h2>
-             <div className="w-24 h-[1px] bg-white/20 mx-auto mt-4"></div>
-           </div>
-           <div className="grid grid-cols-1 md:grid-cols-3 gap-10">
+           <div className="grid grid-cols-1 md:grid-cols-3 gap-5 sm:gap-10">
              {MOCK_REVIEWS.map((review, i) => {
                const hoverBorders = [
                  "hover:border-white/40 hover:shadow-lg hover:shadow-white/5",
@@ -156,36 +156,36 @@ export default function Home() {
                const starColors = ["text-white", "text-zinc-300", "text-zinc-400"];
               
               return (
-                <div key={review.id} className={`bg-zinc-900/55 border border-zinc-900 p-8 rounded-2xl flex flex-col justify-between h-full transition-all duration-300 shadow-sm backdrop-blur-md ${hoverBorders[i % 3]}`}>
+                <div key={review.id} className={`bg-zinc-900/55 border border-zinc-900 p-5 sm:p-8 rounded-xl sm:rounded-2xl flex flex-col justify-between h-full transition-all duration-300 shadow-sm backdrop-blur-md ${hoverBorders[i % 3]}`}>
                   <div>
-                    <div className="flex mb-6 space-x-1">
+                    <div className="flex mb-3 sm:mb-6 space-x-1">
                       {[...Array(review.rating)].map((_, idx) => (
                         <Star key={idx} className="w-3.5 h-3.5 fill-current text-amber-500" />
                       ))}
                     </div>
-                    <p className="text-zinc-300 italic text-base leading-relaxed mb-8 flex-grow">"{review.text}"</p>
+                    <p className="text-zinc-300 italic text-xs sm:text-sm md:text-base leading-relaxed mb-4 sm:mb-8 flex-grow">"{review.text}"</p>
                   </div>
-                  <div className="border-t border-zinc-800 pt-5 flex justify-between items-center font-mono">
+                  <div className="border-t border-zinc-800/80 pt-3.5 sm:pt-5 flex justify-between items-center font-mono">
                     <div>
                       <p className="font-sans font-bold text-white uppercase tracking-wider text-xs mb-1">{review.name}</p>
                       <p className="text-[10px] text-zinc-500 tracking-wider">{review.date}</p>
                     </div>
-                    <span className="text-[10px] bg-white/10 text-white font-bold px-2.5 py-0.5 rounded border border-white/15">Verified</span>
+                    <span className="text-[9px] sm:text-[10px] bg-white/10 text-white font-bold px-2 py-0.5 rounded border border-white/15 font-mono">Verified</span>
                   </div>
                 </div>
               );
             })}
           </div>
 
-          <div className="mt-16 flex justify-center">
+          <div className="mt-8 sm:mt-16 flex justify-center">
             <a 
               href="https://share.google/lolTXlsqZR1EaCrGJ" 
               target="_blank" 
               rel="noreferrer"
-              className="group flex items-center justify-between gap-6 px-8 py-4 bg-black/60 border border-white/20 hover:border-white text-white hover:bg-white hover:text-black rounded-full text-xs font-bold tracking-[0.2em] uppercase font-mono transition-all duration-500 hover:scale-[1.03] active:scale-95 shadow-xl hover:shadow-white/10 max-w-md w-full sm:w-auto"
+              className="group flex items-center justify-between gap-4 sm:gap-6 px-6 sm:px-8 py-3.5 sm:py-4 bg-black/60 border border-white/20 hover:border-white text-white hover:bg-white hover:text-black rounded-full text-[11px] sm:text-xs font-bold tracking-[0.15em] sm:tracking-[0.2em] uppercase font-mono transition-all duration-500 hover:scale-[1.03] active:scale-95 shadow-xl hover:shadow-white/10 max-w-md w-full sm:w-auto"
             >
-              <div className="flex items-center gap-3">
-                <Star className="w-4 h-4 fill-current text-white group-hover:text-black transition-colors" />
+              <div className="flex items-center gap-2.5 sm:gap-3">
+                <Star className="w-3.5 h-3.5 sm:w-4 sm:h-4 fill-current text-white group-hover:text-black transition-colors" />
                 <span>Write or View Google Reviews</span>
               </div>
               <span className="text-sm font-light transition-transform duration-300 group-hover:translate-x-1.5">→</span>

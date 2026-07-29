@@ -119,7 +119,7 @@ export default function Inventory() {
         {/* Header */}
         <div className="flex flex-col md:flex-row justify-between items-start md:items-center mb-12 gap-6 border-b border-white/20 pb-8">
           <div>
-            <h1 className="text-4xl font-serif font-bold text-white tracking-widest uppercase">Curated Collection</h1>
+            <h1 className="text-2xl sm:text-3xl md:text-4xl font-serif font-bold text-white tracking-wider sm:tracking-widest uppercase whitespace-nowrap">Curated Collection</h1>
             <p className="text-zinc-400 mt-2 tracking-widest uppercase text-[10px] font-mono font-bold">Explore <span className="text-white">{filteredCars.length}</span> Verified Motorcars in <span className="text-zinc-300">Mumbai</span></p>
           </div>
           

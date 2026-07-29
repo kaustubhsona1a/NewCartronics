@@ -94,21 +94,21 @@ export const MOCK_REVIEWS = [
     id: 1,
     name: "Rajesh Nair",
     rating: 5,
-    text: "Picked up a 530d M Sport from them last month. If you are an enthusiast, you know how hard it is to find a clean 6-cylinder diesel 5 Series in Maharashtra. Most dealers try to hide accidental history or odometer tampering, but Cartronics was 100% transparent. Took it to my trusted garage in Kopar Khairane for a checkup, and even they were impressed. Absolute rocket of a car, perfect for my BKC commute via the Freeway.",
+    text: "Picked up a 530d M Sport last month. Cartronics was 100% transparent with full service history and zero hidden issues. Independent inspection in Kopar Khairane went flawlessly. Absolute rocket of a car!",
     date: "2 months ago"
   },
   {
     id: 2,
     name: "Aditya Ranade",
     rating: 5,
-    text: "Honestly was a bit skeptical buying a used DCT car, but the Cartronics team showed me full service records of this Verna Turbo. Got the car delivered to my place in Vashi. The condition is so good, my neighbors still think I bought it brand new. No unnecessary follow-ups or typical dealer drama. Very smooth RTO transfer as well.",
+    text: "Got a Verna Turbo delivered to my place in Vashi with complete records. Showroom condition, smooth RTO transfer, and zero dealer drama. Neighbors still think I bought it brand new!",
     date: "1 month ago"
   },
   {
     id: 3,
     name: "Amritpal Singh",
     rating: 5,
-    text: "We wanted a clean 7-seater luxury SUV for family trips from Kharghar to Lonavala, and a brand new GLS has a crazy waiting period. Found a 2022 GLS 400d with these guys. Visited their place, did a proper test drive, and closed the deal in 2 days. The car feels solid, no rattles, and they even got the ceramic coating done before delivery. Proper premium experience.",
+    text: "Bought a 2022 GLS 400d for family trips. Visited their Nerul showroom, test drove, and closed the deal in 2 days. Solid car with ceramic coating done before delivery. Premium experience!",
     date: "3 weeks ago"
   }
 ];
