@@ -62,18 +62,18 @@ export default function Home() {
         <meta name="twitter:card" content="summary_large_image" />
       </Helmet>
 
-      {/* Hero Space - Styled with quick action buttons using black and white minimalist style positioned slightly higher */}
-      <section className="relative min-h-[88vh] sm:min-h-[92vh] flex flex-col items-center justify-end pb-20 sm:pb-32 lg:pb-36 overflow-hidden px-4 text-center z-20">
+      {/* Hero Space - Styled with quick action buttons using black and white minimalist style positioned higher */}
+      <section className="relative min-h-[80vh] sm:min-h-[85vh] lg:min-h-[88vh] flex flex-col items-center justify-end pb-22 sm:pb-64 lg:pb-80 overflow-hidden px-4 text-center z-20">
         <div className="max-w-4xl mx-auto flex flex-col items-center justify-center w-full">
           
           <div className="relative z-30 flex flex-col sm:flex-row items-center justify-center gap-4 sm:gap-6 w-full max-w-xs sm:max-w-xl mx-auto">
-            <div className="relative group w-[185px] sm:w-[195px] hover:scale-[1.02] active:scale-[0.98] transition-all duration-300">
+            <div className="relative group w-[185px] sm:w-[195px] hover:scale-105 active:scale-95 transition-all duration-300">
               <Link 
                 to="/inventory" 
-                className="relative z-0 flex items-center justify-center w-full h-10 sm:h-12 bg-black/40 hover:bg-black/75 text-white hover:text-white border border-white/20 hover:border-white/40 backdrop-blur-md font-bold tracking-wide uppercase text-[10px] sm:text-xs font-mono rounded-xl transition-all duration-300 text-center overflow-hidden"
+                className="relative z-0 flex items-center justify-center w-full h-10 sm:h-12 bg-black/60 hover:bg-white text-white hover:text-black border border-white/30 hover:border-white backdrop-blur-md font-bold tracking-wide uppercase text-[10px] sm:text-xs font-mono rounded-xl transition-all duration-300 text-center overflow-hidden shadow-lg hover:shadow-[0_0_20px_rgba(255,255,255,0.4)]"
               >
                 {/* Clean, perfectly integrated circulating trace */}
-                <svg className="absolute inset-0 w-full h-full pointer-events-none" fill="none">
+                <svg className="absolute inset-0 w-full h-full pointer-events-none transition-opacity duration-300" fill="none">
                   <rect 
                     x="1" 
                     y="1" 
@@ -81,20 +81,20 @@ export default function Home() {
                     height="calc(100% - 2px)" 
                     rx="11" 
                     pathLength="100"
-                    className="circulating-ring stroke-white stroke-[2px] opacity-100" 
+                    className="circulating-ring stroke-white group-hover:stroke-black stroke-[2px] opacity-100" 
                   />
                 </svg>
-                Explore Collection
+                <span className="relative z-10">Explore Collection</span>
               </Link>
             </div>
 
-            <div className="relative group w-[185px] sm:w-[195px] hover:scale-[1.02] active:scale-[0.98] transition-all duration-300">
+            <div className="relative group w-[185px] sm:w-[195px] hover:scale-105 active:scale-95 transition-all duration-300">
               <Link 
                 to="/sell" 
-                className="relative z-0 flex items-center justify-center w-full h-10 sm:h-12 bg-black/40 hover:bg-black/75 text-white hover:text-white border border-white/20 hover:border-white/40 backdrop-blur-md font-bold tracking-wide uppercase text-[10px] sm:text-xs font-mono rounded-xl transition-all duration-300 text-center overflow-hidden"
+                className="relative z-0 flex items-center justify-center w-full h-10 sm:h-12 bg-black/60 hover:bg-white text-white hover:text-black border border-white/30 hover:border-white backdrop-blur-md font-bold tracking-wide uppercase text-[10px] sm:text-xs font-mono rounded-xl transition-all duration-300 text-center overflow-hidden shadow-lg hover:shadow-[0_0_20px_rgba(255,255,255,0.4)]"
               >
                 {/* Clean, perfectly integrated circulating trace */}
-                <svg className="absolute inset-0 w-full h-full pointer-events-none" fill="none">
+                <svg className="absolute inset-0 w-full h-full pointer-events-none transition-opacity duration-300" fill="none">
                   <rect 
                     x="1" 
                     y="1" 
@@ -102,10 +102,10 @@ export default function Home() {
                     height="calc(100% - 2px)" 
                     rx="11" 
                     pathLength="100"
-                    className="circulating-ring stroke-white stroke-[2px] opacity-0 group-hover:opacity-100" 
+                    className="circulating-ring stroke-white group-hover:stroke-black stroke-[2px] opacity-80 group-hover:opacity-100" 
                   />
                 </svg>
-                Sell Your Car
+                <span className="relative z-10">Sell Your Car</span>
               </Link>
             </div>
           </div>
@@ -113,7 +113,7 @@ export default function Home() {
       </section>
 
       {/* Why Choose Us */}
-      <section className="py-12 sm:py-16 bg-transparent relative z-10">
+      <section className="pt-20 pb-12 sm:py-16 bg-transparent relative z-10">
         <div className="container mx-auto max-w-7xl px-4">
           <div className="text-center max-w-3xl mx-auto mb-8 sm:mb-12">
             <span className="text-zinc-400 tracking-[0.2em] uppercase text-[10px] sm:text-xs font-bold mb-2 block font-mono">Certified Quality Standards</span>
