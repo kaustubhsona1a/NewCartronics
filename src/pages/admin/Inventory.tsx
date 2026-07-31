@@ -1,4 +1,5 @@
 import { useState } from 'react';
+import { createPortal } from 'react-dom';
 import { Link } from 'react-router-dom';
 import { formatPrice, Vehicle } from '../../data/mockData';
 import { Search, Plus, Edit, Trash2, AlertTriangle } from 'lucide-react';
@@ -172,14 +173,14 @@ export default function AdminInventory() {
       </div>
 
       {/* Delete Confirmation Modal */}
-      {carToDelete && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center p-4">
+      {carToDelete && createPortal(
+        <div className="fixed inset-0 z-[9999] flex items-center justify-center p-4">
           <div 
             onClick={() => setCarToDelete(null)}
-            className="absolute inset-0 bg-black/80 backdrop-blur-sm transition-opacity" 
+            className="fixed inset-0 bg-black/80 backdrop-blur-sm transition-opacity" 
           />
           
-          <div className="bg-zinc-950 border border-white/10 rounded-2xl p-6 sm:p-8 max-w-md w-full relative z-10 shadow-2xl animate-in fade-in zoom-in-95 duration-200">
+          <div className="bg-zinc-950 border border-white/10 rounded-2xl p-6 sm:p-8 max-w-md w-full relative z-10 shadow-2xl animate-in fade-in zoom-in-95 duration-200 my-auto">
             <div className="space-y-5">
               <div className="w-12 h-12 rounded-xl bg-red-500/10 border border-red-500/25 flex items-center justify-center text-red-500 mx-auto sm:mx-0">
                 <AlertTriangle className="w-6 h-6" />
@@ -214,7 +215,8 @@ export default function AdminInventory() {
               </div>
             </div>
           </div>
-        </div>
+        </div>,
+        document.body
       )}
     </div>
   );

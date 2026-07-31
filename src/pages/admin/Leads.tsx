@@ -1,4 +1,5 @@
 import { useState } from 'react';
+import { createPortal } from 'react-dom';
 import { useVehicles } from '../../context/VehicleContext';
 import { Trash2 } from 'lucide-react';
 
@@ -168,16 +169,16 @@ export default function AdminLeads() {
         )}
       </div>
       {/* Premium Custom Confirmation Modal */}
-      {leadToDelete && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center p-4">
+      {leadToDelete && createPortal(
+        <div className="fixed inset-0 z-[9999] flex items-center justify-center p-4">
           {/* Backdrop */}
           <div 
             onClick={() => setLeadToDelete(null)}
-            className="absolute inset-0 bg-black/80 backdrop-blur-sm transition-opacity" 
+            className="fixed inset-0 bg-black/80 backdrop-blur-sm transition-opacity" 
           />
           
           {/* Modal Container */}
-          <div className="bg-zinc-950 border border-white/10 rounded-2xl p-6 sm:p-8 max-w-md w-full relative z-10 shadow-2xl animate-in fade-in zoom-in-95 duration-200">
+          <div className="bg-zinc-950 border border-white/10 rounded-2xl p-6 sm:p-8 max-w-md w-full relative z-10 shadow-2xl animate-in fade-in zoom-in-95 duration-200 my-auto">
             <div className="space-y-4">
               <div className="w-12 h-12 rounded-xl bg-red-500/10 border border-red-500/25 flex items-center justify-center text-red-500 mx-auto sm:mx-0">
                 <Trash2 className="w-5 h-5" />
@@ -215,16 +216,17 @@ export default function AdminLeads() {
               </div>
             </div>
           </div>
-        </div>
+        </div>,
+        document.body
       )}
 
       {/* Premium custom attachment Lightbox Modal */}
-      {activeImage && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center p-4">
+      {activeImage && createPortal(
+        <div className="fixed inset-0 z-[9999] flex items-center justify-center p-4">
           {/* Backdrop */}
           <div 
             onClick={() => setActiveImage(null)}
-            className="absolute inset-0 bg-black/90 backdrop-blur-md transition-opacity" 
+            className="fixed inset-0 bg-black/90 backdrop-blur-md transition-opacity" 
           />
           
           {/* Modal Container */}
@@ -267,7 +269,8 @@ export default function AdminLeads() {
               </button>
             </div>
           </div>
-        </div>
+        </div>,
+        document.body
       )}
     </div>
   );
