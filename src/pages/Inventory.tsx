@@ -22,12 +22,22 @@ export default function Inventory() {
     100000000 // 50 Lakh+ / Any
   ];
   const [budgetIndex, setBudgetIndex] = useState(BUDGET_OPTIONS.length - 1);
+  const [minYear, setMinYear] = useState<number | null>(null);
   const [selectedOwners, setSelectedOwners] = useState<string[]>([]);
   const [selectedTransmissions, setSelectedTransmissions] = useState<string[]>([]);
   const [maxMileage, setMaxMileage] = useState<number | null>(null);
   const [selectedFuelTypes, setSelectedFuelTypes] = useState<string[]>([]);
   
   const [isMobileFiltersOpen, setIsMobileFiltersOpen] = useState(false);
+
+  const availableYears = useMemo(() => {
+    const years = vehicles.map(v => typeof v.year === 'number' ? v.year : Number(v.year)).filter(y => Boolean(y) && !isNaN(y));
+    if (years.length === 0) return { min: 2012, max: new Date().getFullYear() };
+    return {
+      min: Math.min(...years, 2015),
+      max: Math.max(...years, new Date().getFullYear())
+    };
+  }, [vehicles]);
 
   const filteredCars = useMemo(() => {
     let result = vehicles.filter(car => car.status === 'Available');
@@ -44,6 +54,11 @@ export default function Inventory() {
     if (budgetIndex < BUDGET_OPTIONS.length - 1) {
       const currentMaxBudget = BUDGET_OPTIONS[budgetIndex];
       result = result.filter(car => car.price <= currentMaxBudget);
+    }
+
+    // Min Year filter
+    if (minYear !== null) {
+      result = result.filter(car => Number(car.year) >= minYear);
     }
 
     // Owners filter
@@ -81,10 +96,14 @@ export default function Inventory() {
       result.sort((a, b) => b.price - a.price);
     } else if (sortBy === 'mileage') {
       result.sort((a, b) => a.mileage - b.mileage);
+    } else if (sortBy === 'year-newest') {
+      result.sort((a, b) => Number(b.year) - Number(a.year));
+    } else if (sortBy === 'year-oldest') {
+      result.sort((a, b) => Number(a.year) - Number(b.year));
     }
     
     return result;
-  }, [vehicles, searchTerm, sortBy, budgetIndex, selectedOwners, selectedTransmissions, maxMileage, selectedFuelTypes]);
+  }, [vehicles, searchTerm, sortBy, budgetIndex, minYear, selectedOwners, selectedTransmissions, maxMileage, selectedFuelTypes]);
 
   const toggleOwner = (owner: string) => {
     setSelectedOwners(prev => prev.includes(owner) ? prev.filter(o => o !== owner) : [...prev, owner]);
@@ -100,6 +119,7 @@ export default function Inventory() {
 
   const resetFilters = () => {
     setBudgetIndex(BUDGET_OPTIONS.length - 1);
+    setMinYear(null);
     setSelectedOwners([]);
     setSelectedTransmissions([]);
     setMaxMileage(null);
@@ -170,11 +190,74 @@ export default function Inventory() {
                       value={sortBy}
                       onChange={(e) => setSortBy(e.target.value)}
                     >
-                      <option value="newest" className="bg-zinc-950">Newest Inventory</option>
+                      <option value="newest" className="bg-zinc-950">Newest Listings</option>
+                      <option value="year-newest" className="bg-zinc-950">Year: Newest First</option>
+                      <option value="year-oldest" className="bg-zinc-950">Year: Oldest First</option>
                       <option value="price-low" className="bg-zinc-950">Price: Low to High</option>
                       <option value="price-high" className="bg-zinc-950">Price: High to Low</option>
                       <option value="mileage" className="bg-zinc-950">Mileage: Low to High</option>
                     </select>
+                  </div>
+                </div>
+
+                {/* Model Year */}
+                <div>
+                  <div className="flex justify-between items-center mb-3">
+                    <h4 className="text-[10px] uppercase tracking-wider text-zinc-400 font-bold font-mono">Model Year</h4>
+                    <span className="text-[11px] text-white tracking-wider font-bold font-mono">
+                      {minYear === null ? 'Any Year' : `${minYear}+`}
+                    </span>
+                  </div>
+
+                  {/* Year Quick Chips */}
+                  <div className="flex flex-wrap gap-1.5 mb-3">
+                    {[
+                      { label: 'All', val: null },
+                      { label: '2018+', val: 2018 },
+                      { label: '2020+', val: 2020 },
+                      { label: '2022+', val: 2022 },
+                      { label: '2023+', val: 2023 },
+                    ].map((chip) => {
+                      const isActive = minYear === chip.val;
+                      return (
+                        <button
+                          key={chip.label}
+                          type="button"
+                          onClick={() => setMinYear(chip.val)}
+                          className={`px-2.5 py-1 text-[10px] font-mono rounded-lg border transition-all ${
+                            isActive
+                              ? 'bg-white text-zinc-950 border-white font-bold shadow-sm'
+                              : 'bg-zinc-950/40 text-zinc-400 border-white/20 hover:border-white/50 hover:text-white'
+                          }`}
+                        >
+                          {chip.label}
+                        </button>
+                      );
+                    })}
+                  </div>
+
+                  {/* Year Slider */}
+                  <div className="px-2">
+                    <input 
+                      type="range" 
+                      min={availableYears.min} 
+                      max={availableYears.max} 
+                      step="1"
+                      value={minYear === null ? availableYears.min : minYear} 
+                      onChange={(e) => {
+                        const val = parseInt(e.target.value);
+                        if (val <= availableYears.min) {
+                          setMinYear(null);
+                        } else {
+                          setMinYear(val);
+                        }
+                      }}
+                      className="w-full accent-white h-1 bg-white/10 rounded-lg appearance-none cursor-pointer"
+                    />
+                    <div className="flex justify-between text-[9px] font-mono text-zinc-500 mt-1">
+                      <span>{availableYears.min}</span>
+                      <span>{availableYears.max}</span>
+                    </div>
                   </div>
                 </div>
 

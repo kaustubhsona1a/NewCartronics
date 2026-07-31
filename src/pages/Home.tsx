@@ -63,7 +63,7 @@ export default function Home() {
       </Helmet>
 
       {/* Hero Space - Styled with quick action buttons using black and white minimalist style positioned higher */}
-      <section className="relative min-h-[80vh] sm:min-h-[85vh] lg:min-h-[88vh] flex flex-col items-center justify-end pb-28 sm:pb-64 lg:pb-80 overflow-hidden px-4 text-center z-20">
+      <section className="relative min-h-[80vh] sm:min-h-[85vh] lg:min-h-[88vh] flex flex-col items-center justify-end pb-36 sm:pb-52 lg:pb-64 overflow-hidden px-4 text-center z-20">
         <div className="max-w-4xl mx-auto flex flex-col items-center justify-center w-full">
           
           <div className="relative z-30 flex flex-col sm:flex-row items-center justify-center gap-4 sm:gap-6 w-full max-w-xs sm:max-w-xl mx-auto">

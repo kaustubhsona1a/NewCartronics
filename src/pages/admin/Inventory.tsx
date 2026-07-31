@@ -1,19 +1,27 @@
 import { useState } from 'react';
 import { Link } from 'react-router-dom';
-import { formatPrice } from '../../data/mockData';
-import { Search, Plus, Edit, Trash2 } from 'lucide-react';
+import { formatPrice, Vehicle } from '../../data/mockData';
+import { Search, Plus, Edit, Trash2, AlertTriangle } from 'lucide-react';
 import { useVehicles } from '../../context/VehicleContext';
 
 export default function AdminInventory() {
   const { vehicles, updateVehicle, removeVehicle } = useVehicles();
   const [searchTerm, setSearchTerm] = useState('');
   const [statusFilter, setStatusFilter] = useState('All Statuses');
+  const [carToDelete, setCarToDelete] = useState<Vehicle | null>(null);
   
   const filteredVehicles = vehicles.filter(v => {
     const matchesSearch = (v.make + ' ' + v.model + ' ' + (v.registration || '')).toLowerCase().includes(searchTerm.toLowerCase());
     const matchesStatus = statusFilter === 'All Statuses' || v.status === statusFilter;
     return matchesSearch && matchesStatus;
   });
+
+  const handleDeleteConfirm = () => {
+    if (carToDelete) {
+      removeVehicle(carToDelete.id);
+      setCarToDelete(null);
+    }
+  };
 
   return (
     <div className="space-y-8">
@@ -97,7 +105,7 @@ export default function AdminInventory() {
                       <Link to={`/dealer-management/inventory/edit/${car.id}`} className="p-2 text-zinc-400 hover:text-white bg-zinc-900/30 hover:bg-white/5 border border-white/5 hover:border-white/30 rounded-xl transition-all">
                         <Edit className="w-4 h-4" />
                       </Link>
-                      <button onClick={() => removeVehicle(car.id)} className="p-2 text-zinc-400 hover:text-red-400 bg-zinc-900/30 hover:bg-red-500/10 border border-white/5 hover:border-red-500/20 rounded-xl transition-all">
+                      <button onClick={() => setCarToDelete(car)} className="p-2 text-zinc-400 hover:text-red-400 bg-zinc-900/30 hover:bg-red-500/10 border border-white/5 hover:border-red-500/20 rounded-xl transition-all" title="Delete Car">
                         <Trash2 className="w-4 h-4" />
                       </button>
                     </div>
@@ -149,7 +157,7 @@ export default function AdminInventory() {
                   <Link to={`/dealer-management/inventory/edit/${car.id}`} className="p-2 text-zinc-300 hover:text-white bg-zinc-900/40 hover:bg-white/5 border border-white/5 hover:border-white/25 rounded-xl transition-all" title="Edit Car">
                     <Edit className="w-4.5 h-4.5" />
                   </Link>
-                  <button onClick={() => removeVehicle(car.id)} className="p-2 text-zinc-300 hover:text-red-400 bg-zinc-900/40 hover:bg-red-500/10 border border-white/5 hover:border-red-500/30 rounded-xl transition-all" title="Delete Car">
+                  <button onClick={() => setCarToDelete(car)} className="p-2 text-zinc-300 hover:text-red-400 bg-zinc-900/40 hover:bg-red-500/10 border border-white/5 hover:border-red-500/30 rounded-xl transition-all" title="Delete Car">
                     <Trash2 className="w-4.5 h-4.5" />
                   </button>
                 </div>
@@ -162,6 +170,52 @@ export default function AdminInventory() {
           <div className="p-12 text-center text-zinc-500 font-mono text-xs uppercase tracking-wider">No luxury vehicles found matching criteria.</div>
         )}
       </div>
+
+      {/* Delete Confirmation Modal */}
+      {carToDelete && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center p-4">
+          <div 
+            onClick={() => setCarToDelete(null)}
+            className="absolute inset-0 bg-black/80 backdrop-blur-sm transition-opacity" 
+          />
+          
+          <div className="bg-zinc-950 border border-white/10 rounded-2xl p-6 sm:p-8 max-w-md w-full relative z-10 shadow-2xl animate-in fade-in zoom-in-95 duration-200">
+            <div className="space-y-5">
+              <div className="w-12 h-12 rounded-xl bg-red-500/10 border border-red-500/25 flex items-center justify-center text-red-500 mx-auto sm:mx-0">
+                <AlertTriangle className="w-6 h-6" />
+              </div>
+              
+              <div className="text-center sm:text-left space-y-2">
+                <h3 className="text-lg font-serif font-bold text-white tracking-wider uppercase">Confirm Deletion</h3>
+                <p className="text-sm text-zinc-300 font-sans leading-relaxed">
+                  Do you surely want to delete the listing?
+                </p>
+                <div className="bg-white/[0.03] border border-white/5 rounded-xl p-3 mt-3 text-xs text-zinc-400 text-left font-mono">
+                  <p className="text-white font-bold font-sans text-sm">{carToDelete.year} {carToDelete.make} {carToDelete.model}</p>
+                  <p className="text-[10px] text-zinc-400 uppercase tracking-wider mt-0.5">{carToDelete.registration || 'Reg: N/A'} • {formatPrice(carToDelete.price)}</p>
+                </div>
+              </div>
+
+              <div className="flex flex-col sm:flex-row gap-3 pt-2">
+                <button
+                  type="button"
+                  onClick={() => setCarToDelete(null)}
+                  className="flex-1 px-4 py-3 bg-zinc-900/50 hover:bg-zinc-800/80 border border-white/10 text-zinc-300 hover:text-white rounded-xl text-xs font-bold tracking-widest font-mono uppercase transition-colors"
+                >
+                  Cancel
+                </button>
+                <button
+                  type="button"
+                  onClick={handleDeleteConfirm}
+                  className="flex-1 px-4 py-3 bg-red-600 hover:bg-red-500 text-white rounded-xl text-xs font-bold tracking-widest font-mono uppercase transition-colors shadow-lg shadow-red-900/30"
+                >
+                  Delete Listing
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   );
 }
