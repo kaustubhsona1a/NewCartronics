@@ -3,6 +3,7 @@ import { Link } from 'react-router-dom';
 import { useVehicles } from '../context/VehicleContext';
 import { MOCK_REVIEWS } from '../data/mockData';
 import React, { useState } from 'react';
+import { OptimizedImage } from '../components/OptimizedImage';
 
 export default function About() {
   const { siteConfig } = useVehicles();
@@ -62,11 +63,12 @@ export default function About() {
                 >
                   {/* Photo Canvas Frame with Zoom Effect */}
                   <div className="relative overflow-hidden rounded-xl bg-zinc-100 aspect-[4/3] w-full">
-                    <img 
+                    <OptimizedImage 
                       src={img} 
                       alt={`Client Delivery ${i + 1}`} 
+                      loading="lazy"
                       className="w-full h-full object-cover opacity-90 group-hover:opacity-100 group-hover:scale-105 transition-all duration-700 ease-out"
-                      onError={(e) => { e.currentTarget.src = "https://images.unsplash.com/photo-1563720223185-11003d516935?auto=format&fit=crop&q=80&w=800" }}
+                      fallbackSrc="https://images.unsplash.com/photo-1563720223185-11003d516935?auto=format&fit=crop&q=80&w=800"
                     />
                     
                     {/* Dark overlay line container on hover */}
@@ -134,12 +136,12 @@ export default function About() {
               <ChevronLeft className="w-6 h-6" />
             </button>
 
-            <img 
+            <OptimizedImage 
               src={deliveries[activePhotoIndex]} 
               alt="Immersive Celebration"
               onClick={(e) => e.stopPropagation()}
               className="w-full h-full max-h-[70vh] object-contain rounded-2xl border border-white/5 shadow-2xl animate-scale-up"
-              onError={(e) => { e.currentTarget.src = "https://images.unsplash.com/photo-1563720223185-11003d516935?auto=format=crop&q=80&w=800" }}
+              fallbackSrc="https://images.unsplash.com/photo-1563720223185-11003d516935?auto=format&fit=crop&q=80&w=800"
             />
 
             <button

@@ -4,6 +4,7 @@ import React, { useState } from 'react';
 import { useAuth } from '../context/AuthContext';
 import { useVehicles, sanitizeHeroImage } from '../context/VehicleContext';
 import { supabase } from '../lib/supabase';
+import { OptimizedImage } from '../components/OptimizedImage';
 
 export default function AdminLayout() {
   const location = useLocation();
@@ -144,7 +145,7 @@ export default function AdminLayout() {
       {/* Universal Background Photo alignment */}
       <div className="fixed inset-0 z-0 pointer-events-none">
         {siteConfig.homeHeroImage && (
-          <img 
+          <OptimizedImage 
             src={siteConfig.homeHeroImage} 
             className="absolute inset-0 w-full h-full object-cover opacity-[0.12] blur-[3px] scale-[1.01]"
             alt=""

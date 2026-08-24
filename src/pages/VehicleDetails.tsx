@@ -4,6 +4,8 @@ import { CheckCircle2, ChevronLeft, ChevronRight, MapPin, Search, Share2, Copy, 
 import React, { useState, useEffect } from 'react';
 import { useVehicles } from '../context/VehicleContext';
 import { Helmet } from 'react-helmet-async';
+import { OptimizedImage } from '../components/OptimizedImage';
+import { preloadMediaBatch } from '../lib/imageCache';
 
 export default function VehicleDetails() {
   const { vehicles, loading } = useVehicles();
@@ -11,6 +13,13 @@ export default function VehicleDetails() {
   const car = vehicles.find(v => v.id === id);
   const [activeImage, setActiveImage] = useState(0);
   const [isFullscreen, setIsFullscreen] = useState(false);
+
+  // Preload car gallery images to client media cache for zero-latency browsing
+  useEffect(() => {
+    if (car?.images && car.images.length > 0) {
+      preloadMediaBatch(car.images);
+    }
+  }, [car]);
 
   // Swipe support states
   const [touchStart, setTouchStart] = useState<number | null>(null);
@@ -198,37 +207,42 @@ export default function VehicleDetails() {
     setTimeout(() => setCopied(false), 2000);
   };
 
-  const renderGallery = (isMobile: boolean) => {
+  const renderGallery = () => {
     if (!car) return null;
     return (
-      <div className={`shadow-sm rounded-2xl overflow-hidden bg-zinc-900/55 border border-zinc-900/80 backdrop-blur-md ${isMobile ? 'p-2.5 space-y-3' : 'p-4 space-y-4'}`}>
+      <div className="shadow-sm rounded-2xl overflow-hidden bg-zinc-900/55 border border-zinc-900/80 backdrop-blur-md p-2.5 sm:p-4 space-y-3 sm:space-y-4">
         <div 
-          className={`relative overflow-hidden bg-zinc-950/20 rounded-xl group border border-zinc-800/80 cursor-zoom-in ${isMobile ? 'h-[30vh] sm:h-[40vh]' : 'h-[45vh] md:h-[55vh]'}`}
+          className="relative overflow-hidden bg-zinc-950/20 rounded-xl group border border-zinc-800/80 cursor-zoom-in h-[32vh] sm:h-[42vh] lg:h-[55vh]"
           onClick={() => setIsFullscreen(true)}
           onTouchStart={handleTouchStart}
           onTouchMove={handleTouchMove}
           onTouchEnd={handleTouchEnd}
         >
-          <img src={car.images?.[activeImage] || "https://images.unsplash.com/photo-1503376780353-7e6692767b70?auto=format&fit=crop&q=80&w=800"} alt={car.make} className="w-full h-full object-contain transition-all duration-500 opacity-95 group-hover:opacity-100" />
+          <OptimizedImage 
+            src={car.images?.[activeImage]} 
+            alt={car.make} 
+            loading="eager"
+            className="w-full h-full object-contain transition-all duration-500 opacity-95 group-hover:opacity-100" 
+          />
         </div>
-        <div className={`flex overflow-x-auto pb-2 custom-scrollbar ${isMobile ? 'gap-2' : 'gap-4'}`}>
+        <div className="flex overflow-x-auto pb-2 custom-scrollbar gap-2 sm:gap-4">
           {(car.images || []).map((img, i) => (
             <button 
               key={img} 
               onClick={() => setActiveImage(i)}
-              className={`flex-shrink-0 overflow-hidden rounded-xl border transition-all duration-300 ${isMobile ? 'w-20 h-15 sm:w-24 sm:h-18' : 'w-32 h-24'} ${activeImage === i ? 'border-white scale-[1.02] opacity-100 shadow-md shadow-white/10' : 'border-zinc-800 opacity-60 hover:opacity-100'}`}
+              className={`flex-shrink-0 overflow-hidden rounded-xl border transition-all duration-300 w-20 h-15 sm:w-28 sm:h-20 lg:w-32 lg:h-24 ${activeImage === i ? 'border-white scale-[1.02] opacity-100 shadow-md shadow-white/10' : 'border-zinc-800 opacity-60 hover:opacity-100'}`}
             >
-              <img src={img} alt="Thumbnail" loading="lazy" className="w-full h-full object-cover" />
+              <OptimizedImage src={img} alt="Thumbnail" loading="lazy" className="w-full h-full object-cover" />
             </button>
           ))}
           
           <button 
             onClick={handleWhatsAppPhotos}
-            className={`flex-shrink-0 rounded-xl border border-dashed border-zinc-800 hover:border-white/50 bg-zinc-950/40 hover:bg-zinc-950/80 flex flex-col items-center justify-center p-2 text-center transition-all duration-300 hover:scale-[1.02] cursor-pointer group ${isMobile ? 'w-20 h-15 sm:w-24 sm:h-18' : 'w-32 h-24'}`}
+            className="flex-shrink-0 rounded-xl border border-dashed border-zinc-800 hover:border-white/50 bg-zinc-950/40 hover:bg-zinc-950/80 flex flex-col items-center justify-center p-2 text-center transition-all duration-300 hover:scale-[1.02] cursor-pointer group w-20 h-15 sm:w-28 sm:h-20 lg:w-32 lg:h-24"
             title="Enquire on WhatsApp for more photos"
           >
-            <Plus className={`${isMobile ? 'w-4 h-4 mb-0.5' : 'w-5 h-5 mb-1'} text-zinc-400 group-hover:text-white transition-colors`} />
-            <span className={`${isMobile ? 'text-[6px] sm:text-[7px]' : 'text-[8px]'} leading-tight font-semibold text-zinc-500 group-hover:text-zinc-300 transition-colors uppercase tracking-widest font-mono`}>
+            <Plus className="w-4 h-4 sm:w-5 sm:h-5 mb-0.5 sm:mb-1 text-zinc-400 group-hover:text-white transition-colors" />
+            <span className="text-[6px] sm:text-[8px] leading-tight font-semibold text-zinc-500 group-hover:text-zinc-300 transition-colors uppercase tracking-widest font-mono">
               More Photos
             </span>
           </button>
@@ -486,9 +500,10 @@ export default function VehicleDetails() {
               </button>
             )}
 
-            <img 
-              src={car.images?.[activeImage] || "https://images.unsplash.com/photo-1503376780353-7e6692767b70?auto=format&fit=crop&q=80&w=800"} 
+            <OptimizedImage 
+              src={car.images?.[activeImage]} 
               alt={`Fullscreen ${car.make} ${car.model}`} 
+              loading="eager"
               className="max-w-full max-h-full object-contain cursor-default select-none transition-all duration-300"
               onClick={(e) => e.stopPropagation()}
             />
@@ -537,27 +552,27 @@ export default function VehicleDetails() {
           <ChevronLeft className="w-4 h-4 mr-2" /> Back to Collection
         </Link>
 
-        {/* DESKTOP LAYOUT (lg:flex, hidden on mobile) */}
-        <div className="hidden lg:flex gap-12 text-zinc-300">
-          {/* Left Column - Gallery & Details */}
-          <div className="w-full lg:w-2/3 space-y-10">
-            {renderGallery(false)}
+        {/* Unified Responsive Layout - Render gallery once in DOM */}
+        <div className="grid grid-cols-1 lg:grid-cols-3 gap-8 lg:gap-12 text-zinc-300">
+          {/* Main Column - Gallery & Technical Details */}
+          <div className="lg:col-span-2 space-y-6 lg:space-y-10">
+            {renderGallery()}
+            {/* Price Box on Mobile (rendered directly under gallery) */}
+            <div className="block lg:hidden">
+              {renderPriceBox(true)}
+            </div>
             {renderTechnicalDetails(false)}
+            {/* EMI Calculator on Mobile (rendered below details) */}
+            <div className="block lg:hidden">
+              {renderEMICalculator(true)}
+            </div>
           </div>
 
-          {/* Right Column - Price & EMI */}
-          <div className="w-full lg:w-1/3 space-y-8 sticky top-24 self-start">
+          {/* Desktop Right Column - Sticky Price Box & EMI */}
+          <div className="hidden lg:block lg:col-span-1 space-y-8 sticky top-24 self-start">
             {renderPriceBox(false)}
             {renderEMICalculator(false)}
           </div>
-        </div>
-
-        {/* MOBILE LAYOUT (flex lg:hidden) */}
-        <div className="flex lg:hidden flex-col gap-6 text-zinc-300">
-          {renderGallery(true)}
-          {renderPriceBox(true)}
-          {renderTechnicalDetails(true)}
-          {renderEMICalculator(true)}
         </div>
 
         {/* Certified preowned section */}

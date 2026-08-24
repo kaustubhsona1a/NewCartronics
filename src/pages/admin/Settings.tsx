@@ -72,7 +72,7 @@ export default function AdminSettings() {
       setIsCompressing(true);
       setErrorText('');
       try {
-        const publicUrl = await uploadImageToStorage(file, 'site_settings', 'site_settings');
+        const publicUrl = await uploadImageToStorage(file, `site_settings/${key.toLowerCase()}`, 'site_settings');
         
         updateSiteConfig({ [key]: publicUrl });
         const labels: Record<string, string> = {
@@ -119,7 +119,7 @@ export default function AdminSettings() {
       setIsCompressing(true);
       setErrorText('');
       try {
-        const publicUrl = await uploadImageToStorage(file, 'site_settings', 'site_settings');
+        const publicUrl = await uploadImageToStorage(file, 'site_settings/delivery', 'site_settings');
         
         const current = siteConfig.clientDeliveries || [];
         updateSiteConfig({ clientDeliveries: [...current, publicUrl] });

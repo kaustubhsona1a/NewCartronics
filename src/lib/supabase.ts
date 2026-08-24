@@ -129,33 +129,74 @@ export async function uploadImageToStorage(file: File, path: string, bucket: str
   let finalFile = file;
   
   if (file.type.startsWith('image/') && !file.type.includes('svg')) {
-    const isShowcase = bucket === 'site_settings' || path.includes('site_settings') || path.includes('logo') || path.includes('hero') || path.includes('about') || path.includes('delivery');
-    
-    if (!isShowcase) {
-      try {
-        const options = {
-          maxSizeMB: 0.5, // Budget thumbnail boundary (~500 KB) requested by user
-          maxWidthOrHeight: 1440, // Crisp HD resolution envelope for pristine sharpness
-          useWebWorker: true,
-          fileType: 'image/webp' as string, // WebP is key to delivering high resolution & sharpness at ~500 KB
-          initialQuality: 0.88 // Sharp baseline quality
-        };
-        finalFile = await imageCompression(file, options);
-      } catch (err) {
-        console.warn('Image compression failed, using original', err);
-      }
-    } else {
-      console.log('Skipping image compression for showcase asset:', file.name, 'Path:', path, 'Bucket:', bucket);
+    const lowerPath = path.toLowerCase();
+    const isHero = lowerPath.includes('hero') || lowerPath.includes('backdrop');
+    const isDeliveryOrAbout = lowerPath.includes('delivery') || lowerPath.includes('about');
+    const isLogo = lowerPath.includes('logo');
+    const isLead = lowerPath.includes('lead');
+
+    // Multi-tier smart compression for optimal visual fidelity & minimal egress
+    let compressionOptions = {
+      maxSizeMB: 0.28, // ~280 KB default for crisp vehicle gallery photos
+      maxWidthOrHeight: 1440,
+      useWebWorker: true,
+      fileType: 'image/webp' as string,
+      initialQuality: 0.86
+    };
+
+    if (isHero) {
+      compressionOptions = {
+        maxSizeMB: 0.45, // ~450 KB for full-width 2K hero backdrops
+        maxWidthOrHeight: 1920,
+        useWebWorker: true,
+        fileType: 'image/webp' as string,
+        initialQuality: 0.88
+      };
+    } else if (isDeliveryOrAbout) {
+      compressionOptions = {
+        maxSizeMB: 0.25, // ~250 KB for delivery gallery & about photos
+        maxWidthOrHeight: 1440,
+        useWebWorker: true,
+        fileType: 'image/webp' as string,
+        initialQuality: 0.84
+      };
+    } else if (isLogo) {
+      compressionOptions = {
+        maxSizeMB: 0.08, // ~80 KB for logos
+        maxWidthOrHeight: 600,
+        useWebWorker: true,
+        fileType: 'image/webp' as string,
+        initialQuality: 0.90
+      };
+    } else if (isLead) {
+      compressionOptions = {
+        maxSizeMB: 0.15, // ~150 KB for customer valuation submissions
+        maxWidthOrHeight: 1024,
+        useWebWorker: true,
+        fileType: 'image/webp' as string,
+        initialQuality: 0.80
+      };
+    }
+
+    try {
+      finalFile = await imageCompression(file, compressionOptions);
+    } catch (err) {
+      console.warn('Image compression failed, using original file', err);
     }
   }
 
   const fileExt = finalFile.type === 'image/webp' ? 'webp' : (finalFile.name.split('.').pop() || 'jpg');
-  const fileName = `${Math.random()}.${fileExt}`;
+  const fileName = `${Date.now()}_${Math.random().toString(36).substring(2, 9)}.${fileExt}`;
   const filePath = `${path}/${fileName}`;
 
+  // Upload with 1-Year (31,536,000s) immutable cache header so CDN & browsers cache permanently
   const { error: uploadError } = await supabase.storage
     .from(bucket)
-    .upload(filePath, finalFile);
+    .upload(filePath, finalFile, {
+      cacheControl: '31536000', // 1 year immutable cache header
+      upsert: false,
+      contentType: finalFile.type || 'image/webp'
+    });
 
   if (uploadError) {
     throw uploadError;

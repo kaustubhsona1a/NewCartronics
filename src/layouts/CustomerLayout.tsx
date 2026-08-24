@@ -135,7 +135,7 @@ export default function CustomerLayout() {
 
           {/* Global Background - Tailored showcase representation in premium dark theme */}
       <div className="fixed top-0 bottom-0 left-0 right-0 z-0 bg-[#02020a] overflow-hidden pointer-events-none">
-        {/* Desktop Showcase Backdrop */}
+        {/* Responsive Showcase Backdrop using standard picture element to download ONLY ONE image per viewport */}
         {showVideo ? (
           <video 
             ref={desktopVideoRef}
@@ -151,21 +151,27 @@ export default function CustomerLayout() {
             onLoadedMetadata={handleLoadedMetadata}
           />
         ) : (
-          siteConfig.homeHeroImage && (
-            <img 
-              src={siteConfig.homeHeroImage}
-              alt="Showroom Desktop Backdrop"
-              className={`hidden md:block absolute inset-0 w-full h-full object-cover object-top transition-opacity duration-500 ease-in-out ${
-                isHomePage 
-                  ? (isFading ? 'opacity-0' : 'opacity-100') 
-                  : 'opacity-40'
-              }`}
-            />
+          (siteConfig.homeHeroImage || siteConfig.homeHeroMobileImage) && (
+            <picture className="absolute inset-0 w-full h-full">
+              {siteConfig.homeHeroImage && (
+                <source media="(min-width: 768px)" srcSet={siteConfig.homeHeroImage} />
+              )}
+              <img 
+                src={siteConfig.homeHeroMobileImage || siteConfig.homeHeroImage}
+                alt="Showroom Backdrop"
+                decoding="async"
+                className={`absolute inset-0 w-full h-full object-cover object-top transition-opacity duration-500 ease-in-out ${
+                  isHomePage 
+                    ? (isFading ? 'opacity-0' : 'opacity-100') 
+                    : 'opacity-40'
+                }`}
+              />
+            </picture>
           )
         )}
         
-        {/* Mobile-specific Showcase Backdrop */}
-        {showMobileVideo ? (
+        {/* Mobile-specific Video Fallback if video active */}
+        {showMobileVideo && (
           <video 
             ref={mobileVideoRef}
             src={siteConfig.homeHeroMobileVideo || siteConfig.homeHeroVideo}
@@ -179,18 +185,6 @@ export default function CustomerLayout() {
             onEnded={handleVideoEnded}
             onLoadedMetadata={handleLoadedMetadata}
           />
-        ) : (
-          (siteConfig.homeHeroMobileImage || siteConfig.homeHeroImage) && (
-            <img 
-              src={siteConfig.homeHeroMobileImage || siteConfig.homeHeroImage}
-              alt="Showroom Mobile Backdrop"
-              className={`block md:hidden absolute inset-0 w-full h-full object-cover object-top transition-opacity duration-500 ease-in-out ${
-                isHomePage 
-                  ? (isFading ? 'opacity-0' : 'opacity-100') 
-                  : 'opacity-40'
-              }`}
-            />
-          )
         )}
         {/* Dynamic black glass overlay to dissolve screen smoothly on scroll */}
         <div className={`absolute inset-0 transition-all duration-700 ${

@@ -3,6 +3,7 @@ import { Link } from 'react-router-dom';
 import { formatPrice } from '../data/mockData';
 import { Search, Filter, Car, Gauge, Fuel, Cog, Instagram } from 'lucide-react';
 import { useVehicles } from '../context/VehicleContext';
+import { OptimizedImage } from '../components/OptimizedImage';
 
 export default function Inventory() {
   const { vehicles, loading } = useVehicles();
@@ -438,7 +439,12 @@ export default function Inventory() {
                     <Link key={car.id} to={`/inventory/${car.id}`} className="group block h-full">
                       <div className={`bg-white/5 border border-white/25 backdrop-blur-xl ${hoverStyle} transition-all duration-300 ease-out flex flex-col h-full overflow-hidden rounded-2xl shadow-lg`}>
                         <div className="relative aspect-[4/3] sm:aspect-video md:aspect-auto md:h-64 overflow-hidden bg-zinc-950/20 animate-fade-in">
-                          <img src={car.images?.[0] || "https://images.unsplash.com/photo-1503376780353-7e6692767b70?auto=format&fit=crop&q=80&w=800"} alt={`${car.make} ${car.model}`} loading="lazy" className="w-full h-full object-contain bg-zinc-950/10 transition-transform duration-500 ease-out group-hover:scale-[1.06] opacity-95" />
+                          <OptimizedImage 
+                            src={car.images?.[0]} 
+                            alt={`${car.make} ${car.model}`} 
+                            loading="lazy" 
+                            className="w-full h-full object-contain bg-zinc-950/10 transition-transform duration-500 ease-out group-hover:scale-[1.06] opacity-95" 
+                          />
                           <div className="absolute top-4 left-4 bg-white/10 backdrop-blur-md text-white border border-white/30 px-3 py-1 rounded-lg text-xs font-bold tracking-widest font-mono shadow-sm">
                             {car.year}
                           </div>
