@@ -157,10 +157,8 @@ export default function CustomerLayout() {
               src={siteConfig.homeHeroMobileImage || siteConfig.mobileHeroImage || '/hero-mobile.png'}
               alt="Showroom Backdrop"
               decoding="async"
-              className={`absolute inset-0 w-full h-full object-cover object-top transition-opacity duration-500 ease-in-out ${
-                isHomePage 
-                  ? (isFading ? 'opacity-0' : 'opacity-100') 
-                  : 'opacity-40'
+              className={`absolute inset-0 w-full h-full object-cover object-top ${
+                isHomePage ? 'opacity-100' : 'opacity-40'
               }`}
             />
           </picture>

@@ -73,8 +73,22 @@ const DEFAULT_CONFIG: SiteConfig = {
 };
 
 export function sanitizeHeroImage(path: string | undefined): string {
-  if (!path || path === '/backdrop.jpg' || path.trim() === '') {
+  if (!path || path === '/backdrop.jpg' || path.trim() === '' || path === 'undefined' || path === 'null') {
     return "/hero-laptop.png";
+  }
+  return path;
+}
+
+export function sanitizeHeroMobileImage(path: string | undefined): string {
+  if (!path || path.trim() === '' || path === 'undefined' || path === 'null') {
+    return "/hero-mobile.png";
+  }
+  return path;
+}
+
+export function sanitizeLogo(path: string | undefined): string {
+  if (!path || path.trim() === '' || path === 'undefined' || path === 'null') {
+    return "/logo.png";
   }
   return path;
 }
@@ -414,12 +428,12 @@ export function VehicleProvider({ children }: { children: ReactNode }) {
             const parsedConfig: SiteConfig = {
               id: siteData.id,
               aboutImage: sanitizeAboutImage(fetchedAboutImage),
-              homeHeroImage: sanitizeHeroImage(siteData.homeHeroImage || siteData.home_hero_image_url || siteData.home_hero_image || DEFAULT_CONFIG.homeHeroImage),
-              homeHeroMobileImage: fetchedHomeHeroMobileImage,
+              homeHeroImage: sanitizeHeroImage(siteData.homeHeroImage || siteData.home_hero_image_url || siteData.home_hero_image),
+              homeHeroMobileImage: sanitizeHeroMobileImage(fetchedHomeHeroMobileImage || siteData.homeHeroMobileImage || siteData.home_hero_mobile_image_url),
               homeHeroVideo: fetchedHomeHeroVideo,
               homeHeroMobileVideo: fetchedHomeHeroMobileVideo,
               homeHeroType: fetchedHomeHeroType,
-              logo: siteData.logo || siteData.logo_url || DEFAULT_CONFIG.logo,
+              logo: sanitizeLogo(siteData.logo || siteData.logo_url),
               clientDeliveries: fetchedClientDeliveries || DEFAULT_CONFIG.clientDeliveries,
               instagramReels: fetchedInstagramReels || DEFAULT_CONFIG.instagramReels || []
             };
