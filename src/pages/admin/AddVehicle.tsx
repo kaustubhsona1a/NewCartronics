@@ -139,7 +139,6 @@ export default function AdminAddVehicle() {
         const isEditingOriginal = isEditing && id && vehicles.find(v => v.id === id)?.images?.includes(urlToRemove);
         
         if (!isEditingOriginal) {
-          const { deleteImagesFromStorage } = await import('../../lib/supabase');
           await deleteImagesFromStorage([urlToRemove], 'vehicle-images');
           
           // Remove from session tracking since we already deleted it

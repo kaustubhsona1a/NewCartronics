@@ -7,18 +7,17 @@ import ErrorBoundary from './components/ErrorBoundary';
 import CustomerLayout from './layouts/CustomerLayout';
 import AdminLayout from './layouts/AdminLayout';
 
-// Lazy loading pages for Code Splitting (Phase 7: Performance)
-const Home = React.lazy(() => import('./pages/Home'));
-const Inventory = React.lazy(() => import('./pages/Inventory'));
-const VehicleDetails = React.lazy(() => import('./pages/VehicleDetails'));
-const SellCar = React.lazy(() => import('./pages/SellCar'));
-const About = React.lazy(() => import('./pages/About'));
+import Home from './pages/Home';
+import Inventory from './pages/Inventory';
+import VehicleDetails from './pages/VehicleDetails';
+import SellCar from './pages/SellCar';
+import About from './pages/About';
 
-const AdminDashboard = React.lazy(() => import('./pages/admin/Dashboard'));
-const AdminInventory = React.lazy(() => import('./pages/admin/Inventory'));
-const AdminAddVehicle = React.lazy(() => import('./pages/admin/AddVehicle'));
-const AdminLeads = React.lazy(() => import('./pages/admin/Leads'));
-const AdminSettings = React.lazy(() => import('./pages/admin/Settings'));
+import AdminDashboard from './pages/admin/Dashboard';
+import AdminInventory from './pages/admin/Inventory';
+import AdminAddVehicle from './pages/admin/AddVehicle';
+import AdminLeads from './pages/admin/Leads';
+import AdminSettings from './pages/admin/Settings';
 
 const LoadingFallback = () => (
   <div className="min-h-screen bg-zinc-950 flex flex-col items-center justify-center text-white font-mono tracking-widest text-xs uppercase relative overflow-hidden">
