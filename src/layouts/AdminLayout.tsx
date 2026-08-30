@@ -67,13 +67,7 @@ export default function AdminLayout() {
           <div className="absolute top-0 left-0 right-0 h-[2px] bg-gradient-to-r from-transparent via-white/45 to-transparent"></div>
           
           <Link to="/" className="inline-flex flex-col items-center mb-8 group">
-            {siteConfig.logo ? (
-              <img src={siteConfig.logo} alt="Cartronics" className="h-14 w-auto object-contain mb-3" />
-            ) : (
-              <div className="w-14 h-14 bg-zinc-900 border border-zinc-800 rounded-2xl flex items-center justify-center mb-3">
-                <CarFront className="w-6 h-6 text-white" />
-              </div>
-            )}
+            <img src={siteConfig.logo || '/logo.png'} alt="Cartronics" className="h-14 w-auto object-contain mb-3" />
             <h1 className="text-xl font-serif text-white tracking-widest leading-none font-bold uppercase block text-center">
               CARTRONICS
             </h1>

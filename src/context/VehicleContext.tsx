@@ -73,21 +73,22 @@ const DEFAULT_CONFIG: SiteConfig = {
 };
 
 export function sanitizeHeroImage(path: string | undefined): string {
-  if (!path || path === '/backdrop.jpg' || path.trim() === '' || path === 'undefined' || path === 'null') {
+  // Always use local static asset unless a valid custom URL is provided
+  if (!path || path === '/backdrop.jpg' || path.trim() === '' || path === 'undefined' || path === 'null' || path.includes('unsplash.com') || path.includes('supabase.co')) {
     return "/hero-laptop.png";
   }
   return path;
 }
 
 export function sanitizeHeroMobileImage(path: string | undefined): string {
-  if (!path || path.trim() === '' || path === 'undefined' || path === 'null') {
+  if (!path || path.trim() === '' || path === 'undefined' || path === 'null' || path.includes('unsplash.com') || path.includes('supabase.co')) {
     return "/hero-mobile.png";
   }
   return path;
 }
 
 export function sanitizeLogo(path: string | undefined): string {
-  if (!path || path.trim() === '' || path === 'undefined' || path === 'null') {
+  if (!path || path.trim() === '' || path === 'undefined' || path === 'null' || path.includes('unsplash.com') || path.includes('supabase.co')) {
     return "/logo.png";
   }
   return path;
