@@ -151,23 +151,19 @@ export default function CustomerLayout() {
             onLoadedMetadata={handleLoadedMetadata}
           />
         ) : (
-          (siteConfig.homeHeroImage || siteConfig.homeHeroMobileImage) && (
-            <picture className="absolute inset-0 w-full h-full">
-              {siteConfig.homeHeroImage && (
-                <source media="(min-width: 768px)" srcSet={siteConfig.homeHeroImage} />
-              )}
-              <img 
-                src={siteConfig.homeHeroMobileImage || siteConfig.homeHeroImage}
-                alt="Showroom Backdrop"
-                decoding="async"
-                className={`absolute inset-0 w-full h-full object-cover object-top transition-opacity duration-500 ease-in-out ${
-                  isHomePage 
-                    ? (isFading ? 'opacity-0' : 'opacity-100') 
-                    : 'opacity-40'
-                }`}
-              />
-            </picture>
-          )
+          <picture className="absolute inset-0 w-full h-full">
+            <source media="(min-width: 768px)" srcSet={siteConfig.homeHeroImage || '/hero-laptop.png'} />
+            <img 
+              src={siteConfig.homeHeroMobileImage || siteConfig.mobileHeroImage || '/hero-mobile.png'}
+              alt="Showroom Backdrop"
+              decoding="async"
+              className={`absolute inset-0 w-full h-full object-cover object-top transition-opacity duration-500 ease-in-out ${
+                isHomePage 
+                  ? (isFading ? 'opacity-0' : 'opacity-100') 
+                  : 'opacity-40'
+              }`}
+            />
+          </picture>
         )}
         
         {/* Mobile-specific Video Fallback if video active */}
@@ -224,9 +220,7 @@ export default function CustomerLayout() {
             
             {/* Left Side: Branding Text & Logo Only */}
             <Link to="/" className="flex items-center shrink-0 select-none">
-              {siteConfig.logo ? (
-                <img src={siteConfig.logo} alt="Cartronics" className="h-10 sm:h-12 md:h-14 lg:h-16 w-auto max-w-[220px] object-contain transition-all duration-300" />
-              ) : null}
+              <img src={siteConfig.logo || '/logo.png'} alt="Cartronics" className="h-10 sm:h-12 md:h-14 lg:h-16 w-auto max-w-[220px] object-contain transition-all duration-300" />
             </Link>
 
             {/* Right/Middle Side: Desktop Navigation & Social Actions */}
@@ -327,7 +321,7 @@ export default function CustomerLayout() {
           <div className="space-y-6 md:col-span-1">
             <div className="flex items-center inline-flex mb-4">
               <img 
-                src={siteConfig.logo} 
+                src={siteConfig.logo || '/logo.png'} 
                 alt="Cartronics" 
                 className="h-10 w-auto object-contain mr-3 max-w-[150px]" 
                 onError={(e) => {

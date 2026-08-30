@@ -196,7 +196,7 @@ export default function AdminSettings() {
           <p className="text-zinc-500 text-[10px] uppercase font-mono tracking-wider mb-6">Updates logo displayed inside primary front-end header and footer bars.</p>
           <div className="flex flex-col md:flex-row items-stretch md:items-start gap-6">
             <div className="w-52 h-24 overflow-hidden rounded-xl border border-white/5 flex items-center justify-center p-4 bg-black/40 shrink-0 shadow-inner">
-              <img src={siteConfig.logo} alt="Logo Preview" className="max-h-16 max-w-full object-contain" />
+              <img src={siteConfig.logo || '/logo.png'} alt="Logo Preview" className="max-h-16 max-w-full object-contain" />
             </div>
             <div className="flex-grow space-y-4">
               <label className="block w-full cursor-pointer bg-zinc-900/25 border-2 border-dashed border-white/10 hover:border-white hover:bg-white/5 rounded-xl p-6 transition-all text-center">
@@ -223,14 +223,7 @@ export default function AdminSettings() {
           <p className="text-zinc-500 text-[10px] uppercase font-mono tracking-wider mb-6">High-resolution horizontal showcase image displayed as the desktop homepage background.</p>
           <div className="flex flex-col md:flex-row items-stretch md:items-start gap-6">
             <div className="w-52 aspect-video overflow-hidden rounded-xl border border-white/5 bg-zinc-900/30 shrink-0 relative shadow-sm flex items-center justify-center">
-              {siteConfig.homeHeroImage ? (
-                <img src={siteConfig.homeHeroImage} className="w-full h-full object-cover" alt="Hero Desktop Backdrop" />
-              ) : (
-                <div className="text-center p-4">
-                  <p className="text-[10px] text-zinc-500 font-mono uppercase">No photo configured</p>
-                  <p className="text-[8px] text-zinc-600 font-mono mt-1">Default dark solid background will show</p>
-                </div>
-              )}
+              <img src={siteConfig.homeHeroImage || '/hero-laptop.png'} className="w-full h-full object-cover" alt="Hero Desktop Backdrop" />
             </div>
             <div className="flex-grow space-y-4">
               <label className="block w-full cursor-pointer bg-zinc-900/25 border-2 border-dashed border-white/10 hover:border-white hover:bg-white/5 rounded-xl p-6 transition-all text-center">
@@ -257,14 +250,7 @@ export default function AdminSettings() {
           <p className="text-zinc-500 text-[10px] uppercase font-mono tracking-wider mb-6">Optional portrait showcase image optimized for mobile devices.</p>
           <div className="flex flex-col md:flex-row items-stretch md:items-start gap-6">
             <div className="w-52 h-44 overflow-hidden rounded-xl border border-white/5 bg-zinc-900/30 shrink-0 relative shadow-sm flex items-center justify-center">
-              {siteConfig.homeHeroMobileImage ? (
-                <img src={siteConfig.homeHeroMobileImage} className="w-full h-full object-cover" alt="Hero Mobile Backdrop" />
-              ) : (
-                <div className="text-center p-4">
-                  <p className="text-[10px] text-zinc-500 font-mono uppercase">No mobile photo</p>
-                  <p className="text-[8px] text-zinc-600 font-mono mt-1">Falls back to Desktop Photo</p>
-                </div>
-              )}
+              <img src={siteConfig.homeHeroMobileImage || siteConfig.mobileHeroImage || '/hero-mobile.png'} className="w-full h-full object-cover" alt="Hero Mobile Backdrop" />
             </div>
             <div className="flex-grow space-y-4">
               <label className="block w-full cursor-pointer bg-zinc-900/25 border-2 border-dashed border-white/10 hover:border-white hover:bg-white/5 rounded-xl p-6 transition-all text-center">

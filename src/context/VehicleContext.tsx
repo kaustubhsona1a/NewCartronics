@@ -62,10 +62,11 @@ const VehicleContext = createContext<VehicleContextType | undefined>(undefined);
 
 const DEFAULT_CONFIG: SiteConfig = {
   aboutImage: '',
-  homeHeroImage: '',
+  homeHeroImage: '/hero-laptop.png',
+  homeHeroMobileImage: '/hero-mobile.png',
   homeHeroVideo: '',
   homeHeroMobileVideo: '',
-  homeHeroType: 'video',
+  homeHeroType: 'image',
   logo: '/logo.png',
   clientDeliveries: [],
   instagramReels: []
@@ -73,7 +74,7 @@ const DEFAULT_CONFIG: SiteConfig = {
 
 export function sanitizeHeroImage(path: string | undefined): string {
   if (!path || path === '/backdrop.jpg' || path.trim() === '') {
-    return "";
+    return "/hero-laptop.png";
   }
   return path;
 }

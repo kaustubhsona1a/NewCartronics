@@ -144,13 +144,11 @@ export default function AdminLayout() {
     <div className="min-h-screen bg-zinc-950 text-zinc-100 flex relative overflow-hidden font-sans">
       {/* Universal Background Photo alignment */}
       <div className="fixed inset-0 z-0 pointer-events-none">
-        {siteConfig.homeHeroImage && (
-          <OptimizedImage 
-            src={siteConfig.homeHeroImage} 
-            className="absolute inset-0 w-full h-full object-cover opacity-[0.12] blur-[3px] scale-[1.01]"
-            alt=""
-          />
-        )}
+        <OptimizedImage 
+          src={siteConfig.homeHeroImage || '/hero-laptop.png'} 
+          className="absolute inset-0 w-full h-full object-cover opacity-[0.12] blur-[3px] scale-[1.01]"
+          alt=""
+        />
         <div className="absolute inset-0 bg-zinc-950/60 backdrop-blur-[2px]" />
       </div>
 
