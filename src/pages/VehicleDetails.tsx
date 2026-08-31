@@ -1,4 +1,4 @@
-import { useParams, Link } from 'react-router-dom';
+import { useParams, useNavigate } from 'react-router-dom';
 import { formatPrice } from '../data/mockData';
 import { CheckCircle2, ChevronLeft, ChevronRight, MapPin, Search, Share2, Copy, Check, X, Mail, Instagram, Plus } from 'lucide-react';
 import React, { useState, useEffect } from 'react';
@@ -10,6 +10,7 @@ import { preloadMediaBatch } from '../lib/imageCache';
 export default function VehicleDetails() {
   const { vehicles, loading } = useVehicles();
   const { id } = useParams();
+  const navigate = useNavigate();
   const car = vehicles.find(v => v.id === id);
   const [activeImage, setActiveImage] = useState(0);
   const [isFullscreen, setIsFullscreen] = useState(false);
@@ -550,9 +551,18 @@ export default function VehicleDetails() {
 
       <div className="container mx-auto max-w-7xl px-4">
         
-        <Link to="/inventory" className="inline-flex items-center text-zinc-500 hover:text-white uppercase tracking-wider text-xs font-bold mb-8 transition-colors font-mono">
+        <button 
+          onClick={() => {
+            if (window.history.state?.idx > 0) {
+              navigate(-1);
+            } else {
+              navigate('/inventory');
+            }
+          }} 
+          className="inline-flex items-center text-zinc-500 hover:text-white uppercase tracking-wider text-xs font-bold mb-8 transition-colors font-mono cursor-pointer"
+        >
           <ChevronLeft className="w-4 h-4 mr-2" /> Back to Collection
-        </Link>
+        </button>
 
         {/* Unified Responsive Layout - Render gallery once in DOM */}
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-8 lg:gap-12 text-zinc-300">

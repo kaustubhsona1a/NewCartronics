@@ -1,35 +1,78 @@
-import { useState, useMemo } from 'react';
-import { Link } from 'react-router-dom';
+import { useState, useMemo, useEffect, useRef } from 'react';
+import { Link, useSearchParams } from 'react-router-dom';
 import { formatPrice } from '../data/mockData';
 import { Search, Filter, Car, Gauge, Fuel, Cog, Instagram } from 'lucide-react';
 import { useVehicles } from '../context/VehicleContext';
 import { OptimizedImage } from '../components/OptimizedImage';
+import {
+  DEFAULT_BUDGET_OPTIONS,
+  loadSavedFilters,
+  saveFilters,
+  clearSavedFilters,
+  saveInventoryScrollPos,
+  getSavedInventoryScrollPos,
+  InventoryFilters
+} from '../utils/filterStorage';
 
 export default function Inventory() {
   const { vehicles, loading } = useVehicles();
-  const [searchTerm, setSearchTerm] = useState('');
-  const [sortBy, setSortBy] = useState('newest');
-  
-  const BUDGET_OPTIONS = [
-    1000000,  // Below 10L
-    1500000,  // Under 15L
-    2000000,  // Under 20L
-    2500000,  // Under 25L
-    3000000,  // Under 30L
-    3500000,  // Under 35L
-    4000500,  // Under 40L
-    4500000,  // Under 45L
-    5000000,  // Under 50L
-    100000000 // 50 Lakh+ / Any
-  ];
-  const [budgetIndex, setBudgetIndex] = useState(BUDGET_OPTIONS.length - 1);
-  const [minYear, setMinYear] = useState<number | null>(null);
-  const [selectedOwners, setSelectedOwners] = useState<string[]>([]);
-  const [selectedTransmissions, setSelectedTransmissions] = useState<string[]>([]);
-  const [maxMileage, setMaxMileage] = useState<number | null>(null);
-  const [selectedFuelTypes, setSelectedFuelTypes] = useState<string[]>([]);
+  const [searchParams] = useSearchParams();
+
+  // Initialize filter state from URL params first, or saved session storage, or defaults
+  const [initialLoaded] = useState(() => {
+    const saved = loadSavedFilters();
+    const querySearch = searchParams.get('search');
+    if (querySearch !== null) {
+      saved.searchTerm = querySearch;
+    }
+    const querySort = searchParams.get('sort');
+    if (querySort !== null) {
+      saved.sortBy = querySort;
+    }
+    return saved;
+  });
+
+  const BUDGET_OPTIONS = DEFAULT_BUDGET_OPTIONS;
+  const [searchTerm, setSearchTerm] = useState<string>(initialLoaded.searchTerm);
+  const [sortBy, setSortBy] = useState<string>(initialLoaded.sortBy);
+  const [budgetIndex, setBudgetIndex] = useState<number>(initialLoaded.budgetIndex);
+  const [minYear, setMinYear] = useState<number | null>(initialLoaded.minYear);
+  const [selectedOwners, setSelectedOwners] = useState<string[]>(initialLoaded.selectedOwners);
+  const [selectedTransmissions, setSelectedTransmissions] = useState<string[]>(initialLoaded.selectedTransmissions);
+  const [maxMileage, setMaxMileage] = useState<number | null>(initialLoaded.maxMileage);
+  const [selectedFuelTypes, setSelectedFuelTypes] = useState<string[]>(initialLoaded.selectedFuelTypes);
   
   const [isMobileFiltersOpen, setIsMobileFiltersOpen] = useState(false);
+  const hasRestoredScroll = useRef(false);
+
+  // Auto-persist filters whenever any filter change occurs
+  useEffect(() => {
+    const currentFilters: InventoryFilters = {
+      searchTerm,
+      sortBy,
+      budgetIndex,
+      minYear,
+      selectedOwners,
+      selectedTransmissions,
+      maxMileage,
+      selectedFuelTypes
+    };
+    saveFilters(currentFilters);
+  }, [searchTerm, sortBy, budgetIndex, minYear, selectedOwners, selectedTransmissions, maxMileage, selectedFuelTypes]);
+
+  // Restore scroll position once vehicles finish loading
+  useEffect(() => {
+    if (!loading && !hasRestoredScroll.current) {
+      const savedScroll = getSavedInventoryScrollPos();
+      if (savedScroll !== null && savedScroll > 0) {
+        hasRestoredScroll.current = true;
+        // Allow microtask DOM paint then restore smoothly
+        requestAnimationFrame(() => {
+          window.scrollTo({ top: savedScroll, behavior: 'instant' });
+        });
+      }
+    }
+  }, [loading]);
 
   const availableYears = useMemo(() => {
     const years = vehicles.map(v => typeof v.year === 'number' ? v.year : Number(v.year)).filter(y => Boolean(y) && !isNaN(y));
@@ -127,6 +170,7 @@ export default function Inventory() {
     setSelectedFuelTypes([]);
     setSearchTerm('');
     setSortBy('newest');
+    clearSavedFilters();
   };
 
   const ALL_OWNERS = ['1st Owner', '2nd Owner', '3rd Owner', '4th+ Owner', '1st', '2nd', '3rd', '4th+']; // Match formats
@@ -436,7 +480,12 @@ export default function Inventory() {
                   const buttonTextStyle = buttonTextStyles[idx % 3];
 
                   return (
-                    <Link key={car.id} to={`/inventory/${car.id}`} className="group block h-full">
+                    <Link 
+                      key={car.id} 
+                      to={`/inventory/${car.id}`} 
+                      onClick={() => saveInventoryScrollPos(window.scrollY)}
+                      className="group block h-full"
+                    >
                       <div className={`bg-white/5 border border-white/25 backdrop-blur-xl ${hoverStyle} transition-all duration-300 ease-out flex flex-col h-full overflow-hidden rounded-2xl shadow-lg`}>
                         <div className="relative aspect-[4/3] sm:aspect-video md:aspect-auto md:h-64 overflow-hidden bg-zinc-950/20 animate-fade-in">
                           <OptimizedImage 
