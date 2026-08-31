@@ -14,10 +14,12 @@ export default function VehicleDetails() {
   const [activeImage, setActiveImage] = useState(0);
   const [isFullscreen, setIsFullscreen] = useState(false);
 
-  // Preload car gallery images to client media cache for zero-latency browsing
+  // When listing is opened, prioritize caching the active vehicle's remaining images in the background
   useEffect(() => {
-    if (car?.images && car.images.length > 0) {
-      preloadMediaBatch(car.images);
+    if (car?.images && car.images.length > 1) {
+      // Preload the remaining photos of this specific listing on background idle
+      const secondaryPhotos = car.images.slice(1);
+      preloadMediaBatch(secondaryPhotos);
     }
   }, [car]);
 
